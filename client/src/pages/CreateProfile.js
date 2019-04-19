@@ -53,7 +53,7 @@ class CreateProfile extends Component {
         if (this.state.style === '') {
             return this.setState({ errors: { styleEmpty: 'You must Select a style' } });
         } 
-        
+        this.setState({ errors: {} });
         API.saveProfile({
             name: this.state.name,
             location: this.state.location,

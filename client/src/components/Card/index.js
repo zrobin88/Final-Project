@@ -9,7 +9,7 @@ function Card(props) {
   <img src="..." className="card-img-top" alt="..." />
   <div className="card-body">
     <h3>{API.name}</h3>
-    
+ 
   </div>
   <ul className="list-group list-group-flush">
     <li className="list-group-item">Location: {API.location}</li>

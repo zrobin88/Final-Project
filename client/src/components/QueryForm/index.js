@@ -1,10 +1,24 @@
-import React from "react";
+import React, { Component } from "react";
 import "./style.css";
 
+class QueryForm extends Component
+ {
+  state ={
+    location:"",
+    instrument: "",
+    style: ""
+}
 
 
-function QueryForm(props) {
 
+  handleInputChange = event => {
+    this.setState({value: event.target.value});
+  };
+
+
+  
+
+    render(){
     return (
         
         <form>
@@ -12,7 +26,7 @@ function QueryForm(props) {
           {/*Instrument Input */}
         <div className="form-group">
           <label for="exampleFormControlSelect1">What Intsrument Are You Looking For?</label>
-          <select className="form-control" id="instrument-input" placeholder="Select One">
+          <select className="form-control" id="instrument-input"  onChange={this.handleInputChange}>
             <option>Select an Instrument</option>
             <option>Vocals</option>
             <option>Guitar</option>
@@ -27,7 +41,7 @@ function QueryForm(props) {
           {/*Style Input */}
           <div className="form-group">
           <label for="exampleFormControlSelect1">What Style Are You Looking For?</label>
-          <select className="form-control" id="style-input">
+          <select className="form-control" id="style-input"  onChange={this.handleInputChange}>
             <option>Select a Style</option>
             <option>Modern Rock</option>
             <option>Metal</option>
@@ -51,6 +65,6 @@ function QueryForm(props) {
       </form>
     );
 }
-
+ }
 
 export default QueryForm;
