@@ -30,7 +30,7 @@ function About() {
           <Col size="md-2">
          </Col>
           <Col size="md-2">
-          
+         
           </Col>
           <Col size="md-2">
           

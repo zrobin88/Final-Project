@@ -8,11 +8,13 @@ import CreateProfile from "../../pages/CreateProfile"
 
 function CreateProfileBtn(props) {
   return (
+  <button onClick={props.onClick} className="btn btn-success" >
     <Router>
          <Route exact path="/create-profile" component={CreateProfile} />
-         <button onClick={props.onClick} type="button" className="btn btn-success float-right">Create a Profile</button>
+         
 
     </Router>
+    </button>
   );
 }
 

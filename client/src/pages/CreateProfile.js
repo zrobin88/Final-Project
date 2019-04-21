@@ -76,10 +76,10 @@ class CreateProfile extends Component {
         return (
             <div>
                 <Container style={{ marginTop: 30 }}>
-
+                    <h1 className="text-info coolFont">Create a Profile</h1>
                     <Row>
                         <Col size="md-12">
-                            <form>
+                            <form className="text-light coolFont">
                                 {/*Name Input */}
                                 <div className="form-group">
                                     <label for="exampleFormControlInput1">Name</label>
@@ -200,7 +200,7 @@ class CreateProfile extends Component {
                                         id="exampleFormControlInput1"
                                         placeholder="Tell us about yourself" className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
-                                <button className="btn btn-success" onClick={this.handleFormSubmit}>Submit</button>
+                                <button className="btn btn-info" onClick={this.handleFormSubmit}>Submit</button>
                             </form>
 
                         </Col>

@@ -21,8 +21,8 @@ class QueryForm extends Component
     render(){
     return (
         
-        <form>
-            <h1>What are you looking for?</h1>
+        <form className ="text-light">
+            <h1 className ="text-info">What are you looking for?</h1>
           {/*Instrument Input */}
         <div className="form-group">
           <label for="exampleFormControlSelect1">What Intsrument Are You Looking For?</label>

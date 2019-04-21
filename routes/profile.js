@@ -10,6 +10,13 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+    Profile.findById({_id:req.params.id}).then((profile) => {
+        console.log("profile is here", profile)
+        res.send(profile);
+    });
+  });
+
 router.post('/', (req, res) => {
     console.log('req.body', req.body);
     Profile.create(req.body).then(dbModel => {

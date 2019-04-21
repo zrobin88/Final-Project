@@ -4,19 +4,21 @@ import Container from "../components/Container";
 import QueryForm from "../components/QueryForm"
 import Row from "../components/Row";
 import Col from "../components/Col";
-import Jumbotron from "../components/Jumbotron";
+
 import Discover from "./Discover"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "../components/List";
 
 class Query extends Component {
-    state ={
-        profiles: [],
-        name:"",
-        location:"",
+    state = {
+        profiles: null,
+        name: "",
+        location: "",
         instrument: "",
-        style: ""
+        style: "",
+        showProfiles: false,
+        showProfileModal: false
     }
 
     componentDidMount() {
@@ -25,45 +27,54 @@ class Query extends Component {
 
 
     loadProfiles = () => {
-        API.getProfiles()
-            .then(res =>
-                this.setState({
-                    name: "",
-                    location: "",
-                    imageUrl: "",
-                    links: "",
-                    age: 0,
-                    instrument: "",
-                    style: "",
-                    experience: "",
-                    about: ""
-                })
-            )
-            .catch(err => console.log(err));
+        API.getProfiles({
+            name: this.state.name,
+            location: this.state.location,
+
+            instrument: this.state.instrument,
+            style: this.state.style,
+
+        })
+            .then(res => {
+                this.setState({ profiles: res.data })
+            }).catch(err => console.log(err));
     };
 
+    //create on click for get profile 
+    //grab the id of that field 
+    profileModal = (e, id) => {
+        e.preventDefault();
+        API.getModalProfile(id).then(res => {
+            console.log("triggered")
+            this.setState({ showProfileModal: true })
+        }).catch(err => console.log(err))
+        console.log('the id ', id);
+    }
 
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
-          [name]: value
+            [name]: value
         });
-      };
+    };
 
     handleFormSubmit = event => {
-       
+
         event.preventDefault();
-            
-            this.setState({ errors: {} });
-            API.getProfiles({
-                name: this.state.name,
-                location: this.state.location,
-                instrument: this.state.instrument,
-                style: this.state.style
-            })
-                .then(res => this.loadProfiles())
-                .catch(err => console.log(err));
-        
+
+        this.setState({
+            errors: {},
+            showProfiles: true
+        });
+        API.getProfiles({
+            name: this.state.name,
+            location: this.state.location,
+            instrument: this.state.instrument,
+            style: this.state.style
+        })
+            .then(res => this.loadProfiles())
+            .catch(err => console.log(err));
+
     };
 
 
@@ -74,63 +85,133 @@ class Query extends Component {
 
 
     render() {
-        
+
         console.log('this.state', this.state);
-        const { errors, style, location, name,imageUrl, instrument,  } = this.state;
+        const { errors, style, links, age, about, experience, location, name, imageUrl, instrument, profiles, showProfiles, showProfileModal } = this.state;
         return (
             <div>
+                {(showProfileModal &&
+
+                    
+                    <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">{profiles.name}</h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                  
+                                        <img src="..." className="card-img-top" alt="..." />
+                                      
+                                        <ul className="list-group list-group-flush" >
+                                        
+                                            <li className="list-group-item">Location: {location}</li>
+                                            <li className="list-group-item">links: {links}</li>
+                                            <li className="list-group-item">Age: {age}</li>
+                                            <li className="list-group-item">Instrument: {instrument}</li>
+                                            <li className="list-group-item">Style: {style}</li>
+                                            <li className="list-group-item">Experience: {experience}</li>
+                                            <li className="list-group-item">About: {about}</li>
+                                        </ul>
+                                        
+                                      
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" className="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            
+
+                )}
                 <Container style={{ marginTop: 30 }}>
-                    {/*Put query form in a jumbo tron */}
-                    <Row>
-                        <Col size="md-12">
-                            <QueryForm onChange={this.handleInputChange}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col size="md-12">
-                            {/*When user clicks this button route to Discover page
-                            <Link
-                                to="/discover"
-                                className={window.location.pathname === "/discover" ? "nav-link active" : "nav-link"}
-                            >
-                                <Route exact path="/discover" component={Discover} />
-                                Search Musicians
-                            </Link>
-                        */}
-                            <button className="btn btn-success" onClick={this.handleFormSubmit}>Search</button>
-                        </Col>
+                                <Row>
+                                    <Col size="md-12">
+                                        <QueryForm onChange={this.handleInputChange} />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col size="md-12">
+                                          <button
+                                            className="btn btn-info"
+                                            onClick={this.handleFormSubmit}
+                                        >Search</button>
+                                    </Col>
 
 
 
 
-                    </Row>
-                    <Row>
-                        <Col size="md-6 sm-12">
-                            <Jumbotron>
-                                <h1>Results</h1>
-                            </Jumbotron>
-                            {this.state.profiles.length ? (
-                                <List>
-                                    {this.state.profiles.map(profile => (
-                                        <ListItem key={profile._id}>
-                                            <Link to={"/profiles/" + profile._id}>
-                                                <strong>
-                                                    {name}, {location}, {instrument}, {style}
-                                                </strong>
-                                            </Link>
-                                         
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : (
-                                    <h3></h3>
-                            )}
-                        </Col>
-                    </Row>
+                                </Row>
+                                <Row>
+                                    <Col className="profile-table text-light" size="xs-12">
 
-                </Container>
-            </div>
-        )
-    }
-}
+
+                                        {(profiles && showProfiles) &&
+                                            <table className="table table-striped" placeholder="Results">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Location</th>
+                                                        <th scope="col">Instrument</th>
+                                                        <th scope="col">Style</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {profiles.map((profile, index) =>
+                                                        <tr key={profile._id}>
+
+                                                            <td>
+                                                                <strong>
+                                                                    {profile.name}
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    {profile.location}
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    {profile.instrument}
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <strong>
+                                                                    {profile.style}
+                                                                </strong>
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    onClick={(e, profile_id) => this.profileModal(e, profile._id)}
+                                                                    data-toggle="modal"
+                                                                    data-target="#exampleModal"
+                                                                >
+                                                                    Open Profile
+                                                </button>
+                                                            </td>
+                                                        </tr>
+
+                                                    )}
+                                                </tbody>
+                                            </table>
+
+                                        }
+
+
+                                    </Col>
+                                </Row>
+
+                            </Container>
+                        </div>
+                        )
+                    }
+                }
 export default Query;
