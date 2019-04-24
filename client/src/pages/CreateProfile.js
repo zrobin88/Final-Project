@@ -6,6 +6,7 @@ import Row from "../components/Row"
 import Col from "../components/Col"
 import API from "../utils/API"
 import FormBtn from "../components/FormBtn"
+import Hero from "../components/Hero"
 
 class CreateProfile extends Component {
     state = {
@@ -17,6 +18,7 @@ class CreateProfile extends Component {
         instrument: "",
         style: "",
         experience: "",
+        contact: "",
         about: "",
         errors: {}
     }
@@ -33,6 +35,7 @@ class CreateProfile extends Component {
                     instrument: "",
                     style: "",
                     experience: "",
+                    contact:"",
                     about: ""
                 })
             )
@@ -63,6 +66,7 @@ class CreateProfile extends Component {
             instrument: this.state.instrument,
             style: this.state.style,
             experience: this.state.experience,
+            contact: this.state.contact, 
             about: this.state.about
         })
             .then(res => console.log('the results', res))
@@ -72,12 +76,15 @@ class CreateProfile extends Component {
 
     render() {
         console.log('this.state', this.state);
-        const { errors, style, location, name, links,imageUrl } = this.state;
+        const { errors, style, location, name, links,contact, imageUrl } = this.state;
         return (
             <div>
+                
                 <Container style={{ marginTop: 30 }}>
-                    <h1 className="text-info coolFont">Create a Profile</h1>
+               
+                    <h1 className="text-light coolFont">Create a Profile</h1>
                     <Row>
+                        
                         <Col size="md-12">
                             <form className="text-light coolFont">
                                 {/*Name Input */}
@@ -190,6 +197,17 @@ class CreateProfile extends Component {
                                         <option>More Than 20 Years</option>
                                     </select>
                                 </div>
+                                {/*Contact Input */}
+                                <div className="form-group">
+                                    <label for="exampleFormControlInput1">Contact Info</label>
+                                    <input type="text"
+                                        value={this.state.contact}
+                                        name="contact"
+                                        onChange={this.handleInputChange}
+                                        className="form-control"
+                                        id="exampleFormControlInput1"
+                                        placeholder="What is your preferred method of contact?" />
+                                </div>
                                 <div className="form-group">
                                     <label for="exampleFormControlTextarea1">About</label>
                                     <textarea type="text"
@@ -205,8 +223,9 @@ class CreateProfile extends Component {
 
                         </Col>
                     </Row>
-
+               
                 </Container>
+        
             </div>
         )
     }

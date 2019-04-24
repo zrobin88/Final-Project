@@ -22,7 +22,7 @@ function App() {
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/create-profile" component={CreateProfile} />
         </Wrapper>
-        <Footer />
+       
       </div>
     </Router>
   );

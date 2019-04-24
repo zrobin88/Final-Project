@@ -9,11 +9,11 @@ function ResultsTable(props){
 
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Instrument</th>
-                    <th scope="col">Style</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Name {props.name}</th>
+                    <th scope="col">Location {props.location}</th>
+                    <th scope="col">Instrument{props.instrument}</th>
+                    <th scope="col">Style{props.style}</th>
+                    <th scope="col">Action{props.action}</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,7 +28,7 @@ function ResultsTable(props){
                         </td>
                         <td>
                             <strong>
-                                {props.location}
+                                {profile.location}
                             </strong>
                         </td>
                         <td>

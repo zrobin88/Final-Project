@@ -4,11 +4,13 @@ import Container from "../components/Container";
 import QueryForm from "../components/QueryForm"
 import Row from "../components/Row";
 import Col from "../components/Col";
-
+import Hero from "../components/Hero"
 import Discover from "./Discover"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "../components/List";
+import query from 'query-string'
+
 
 class Query extends Component {
     state = {
@@ -26,7 +28,10 @@ class Query extends Component {
     }
 
 
-    loadProfiles = () => {
+    loadProfiles = (req,res) => {
+       
+        
+
         API.getProfiles({
             name: this.state.name,
             location: this.state.location,
@@ -36,7 +41,10 @@ class Query extends Component {
 
         })
             .then(res => {
+                //if(instrument === instrumentKey && style === styleKey){
+
                 this.setState({ profiles: res.data })
+                // }
             }).catch(err => console.log(err));
     };
 
@@ -63,16 +71,26 @@ class Query extends Component {
         event.preventDefault();
 
         this.setState({
+            query:"",
             errors: {},
             showProfiles: true
         });
+
+         //initialize variables for the query form inputs 
+         const instrumentKey = document.getElementById('instrument-input').value;
+         const styleKey = document.getElementById('style-input').value;
+         console.log(instrumentKey, styleKey)
+
+         // REACT ROUTER CODE TO SET QUERY
+        let query = "?instrument="+instrumentKey+"&style="+styleKey; 
+         console.log(this.props.history)
+         this.props.history.push(query)
+
         API.getProfiles({
-            name: this.state.name,
-            location: this.state.location,
             instrument: this.state.instrument,
             style: this.state.style
         })
-            .then(res => this.loadProfiles())
+            .then(res => this.setState({ profiles: res}))
             .catch(err => console.log(err));
 
     };
@@ -87,12 +105,12 @@ class Query extends Component {
     render() {
 
         console.log('this.state', this.state);
-        const { errors, style, links, age, about, experience, location, name, imageUrl, instrument, profiles, showProfiles, showProfileModal } = this.state;
+        const { errors, style, links, age, about, experience, location, name, imageUrl, instrument, contact, profiles, showProfiles, showProfileModal } = this.state;
         return (
             <div>
                 {(showProfileModal &&
 
-                    
+
                     <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog" role="document">
                             <div className="modal-content">
@@ -103,115 +121,118 @@ class Query extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                  
-                                        <img src="..." className="card-img-top" alt="..." />
-                                      
-                                        <ul className="list-group list-group-flush" >
-                                        
-                                            <li className="list-group-item">Location: {location}</li>
-                                            <li className="list-group-item">links: {links}</li>
-                                            <li className="list-group-item">Age: {age}</li>
-                                            <li className="list-group-item">Instrument: {instrument}</li>
-                                            <li className="list-group-item">Style: {style}</li>
-                                            <li className="list-group-item">Experience: {experience}</li>
-                                            <li className="list-group-item">About: {about}</li>
-                                        </ul>
-                                        
-                                      
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" className="btn btn-primary">Save changes</button>
-                                        </div>
+
+                                    <img src="..." className="card-img-top" alt="..." />
+
+                                    <ul className="list-group list-group-flush" >
+
+                                        <li className="list-group-item">Location: {location}</li>
+                                        <li className="list-group-item">links: {links}</li>
+                                        <li className="list-group-item">Age: {age}</li>
+                                        <li className="list-group-item">Instrument: {instrument}</li>
+                                        <li className="list-group-item">Style: {style}</li>
+                                        <li className="list-group-item">Experience: {experience}</li>
+                                        <li className="list-group-item">About: {about}</li>
+                                    </ul>
+
+
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" className="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                            
+                        </div>
+                    </div>
+
 
                 )}
                 <Container style={{ marginTop: 30 }}>
-                                <Row>
-                                    <Col size="md-12">
-                                        <QueryForm onChange={this.handleInputChange} />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col size="md-12">
-                                          <button
-                                            className="btn btn-info"
-                                            onClick={this.handleFormSubmit}
-                                        >Search</button>
-                                    </Col>
+                    <Hero className="rounded" backgroundImage="http://www.carlswebgraphics.com/backgrounds/music-notes-1280.jpg">
+                        <Row>
+                            <Col size="md-12">
+                                <QueryForm onChange={this.handleInputChange} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col size="md-12">
+                                <button
+                                    className="btn btn-info"
+                                    onClick={this.handleFormSubmit}
+                                >Search</button>
+                            </Col>
 
 
 
 
-                                </Row>
-                                <Row>
-                                    <Col className="profile-table text-light" size="xs-12">
+                        </Row>
+                    </Hero>
+                    <Row>
+
+                        <Col className="profile-table text-light" size="xs-12">
 
 
-                                        {(profiles && showProfiles) &&
-                                            <table className="table table-striped" placeholder="Results">
+                            {(profiles && showProfiles) &&
+                                <table className="table table-striped" placeholder="Results">
 
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Name</th>
-                                                        <th scope="col">Location</th>
-                                                        <th scope="col">Instrument</th>
-                                                        <th scope="col">Style</th>
-                                                        <th scope="col">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Location</th>
+                                            <th scope="col">Instrument</th>
+                                            <th scope="col">Style</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                                    {profiles.map((profile, index) =>
-                                                        <tr key={profile._id}>
+                                        {profiles.map((profile, index) =>
+                                            <tr key={profile._id}>
 
-                                                            <td>
-                                                                <strong>
-                                                                    {profile.name}
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    {profile.location}
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    {profile.instrument}
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    {profile.style}
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    onClick={(e, profile_id) => this.profileModal(e, profile._id)}
-                                                                    data-toggle="modal"
-                                                                    data-target="#exampleModal"
-                                                                >
-                                                                    Open Profile
+                                                <td>
+                                                    <strong>
+                                                        {profile.name}
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        {profile.location}
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        {profile.instrument}
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        {profile.style}
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        onClick={(e, profile_id) => this.profileModal(e, profile._id)}
+                                                        data-toggle="modal"
+                                                        data-target="#exampleModal"
+                                                    >
+                                                        Open Profile
                                                 </button>
-                                                            </td>
-                                                        </tr>
+                                                </td>
+                                            </tr>
 
-                                                    )}
-                                                </tbody>
-                                            </table>
+                                        )}
+                                    </tbody>
+                                </table>
 
-                                        }
+                            }
 
 
-                                    </Col>
-                                </Row>
+                        </Col>
+                    </Row>
 
-                            </Container>
-                        </div>
-                        )
-                    }
-                }
+                </Container>
+            </div>
+        )
+    }
+}
 export default Query;

@@ -3,6 +3,9 @@
 font-family: 'Play', sans-serif;
 
 }
+.coolColor{
+    background-image: linear-gradient(silver, white)
+}
 
 .profile-table{
     width: 100%; 

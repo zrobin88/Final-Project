@@ -22,7 +22,7 @@ class QueryForm extends Component
     return (
         
         <form className ="text-light">
-            <h1 className ="text-info">What are you looking for?</h1>
+            <h1 className ="text-light coolFont">What are you looking for?</h1>
           {/*Instrument Input */}
         <div className="form-group">
           <label for="exampleFormControlSelect1">What Intsrument Are You Looking For?</label>

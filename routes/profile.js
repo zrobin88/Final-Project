@@ -2,11 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Profile = require('../models/profiles');
+const queryString = require('query-string')
 
-
-router.get('/', (req, res) => {
-  Profile.find({}).then((profile) => {
-      res.send(profile);
+router.get('/:query', (req, res) => {
+    // PARSE QUERY STRING HERE WITH LIBRARY
+   
+    const values = queryString.parse()
+    
+    // DETERMINE WHETHER YOU HAVE QUERIES AND IF SO USE RIGHT MONGOOSE METHOD
+  Profile.find(values)
+  .then((values) => {
+      res.send(values);
   });
 });
 

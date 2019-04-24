@@ -10,6 +10,7 @@ const ProfileSchema = new Schema({
   instrument: { type: String, required: true},
   style: { type: String, required: true},
   experience: { type: String, required: true},
+  contact: {type: String, required: true}, 
   about: { type: String}
 });
 

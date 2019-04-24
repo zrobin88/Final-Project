@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export default {
 
-  getProfiles: function() {
-   return axios.get("api/profiles");
+export default {
+  
+  getProfiles: function(queryString) {
+   return axios.get(`api/profiles/${queryString}`);
  },
 
  getModalProfile: function(id){
